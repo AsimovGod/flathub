@@ -1,0 +1,89 @@
+{
+    "id": "io.AsimovGod.menshen",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "49",
+    "sdk": "org.gnome.Sdk",
+    "command": "menshen",
+
+    "finish-args": [
+        "--device=dri",
+        "--socket=wayland",
+        "--talk-name=org.freedesktop.Flatpak",
+        "--filesystem=host:ro",
+        "--filesystem=xdg-data/applications:ro",
+        "--filesystem=xdg-data/flatpak:ro",
+        "--filesystem=/var/lib/flatpak:ro",
+        "--filesystem=/var/lib/snapd:ro"
+    ],
+
+    "cleanup": [
+        "../../build"
+    ],
+
+    "modules": [
+        {
+            "name": "glib",
+            "buildsystem": "meson",
+
+            "config-opts": [
+                "-Dtests=false"
+            ],
+
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://gitlab.gnome.org/GNOME/glib.git",
+                    "tag": "2.86.3",
+                    "commit": "7a54787e16ceb20cecda8ad6caab05b24a61e414"
+                },
+
+                {
+                    "type": "patch",
+                    "path": "patch/glib_appinfo.patch"
+                }
+            ]
+        },
+
+        {
+            "name": "libportal",
+            "buildsystem": "meson",
+
+            "config-opts":[
+                "-Dtests=false",
+                "-Ddocs=false",
+                "-Dbackend-gtk3=disabled",
+                "-Dbackend-gtk4=disabled",
+                "-Dbackend-qt5=disabled"
+            ],
+
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/flatpak/libportal.git",
+                    "tag": "0.9.1",
+                    "commit": "8f5dc8d192f6e31dafe69e35219e3b707bde71ce"
+                }
+            ]
+        },
+
+        {
+            "name": "menshen",
+            "buildsystem": "simple",
+
+            "build-commands": [
+                "meson setup 'build/flatpak'",
+                "meson configure -Dpackage='flatpak' 'build/flatpak'",
+                "meson compile -C 'build/flatpak'",
+                "meson install -C 'build/flatpak' --destdir='/'"
+            ],
+
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/AsimovGod/menshen.git",
+                    "commit": "75909288318f66464b28e37c8cb1720fcf3d68cf"
+                }
+            ]
+        }
+    ]
+}
