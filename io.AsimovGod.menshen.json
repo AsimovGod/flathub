@@ -79,7 +79,8 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/AsimovGod/menshen.git"
+                    "url": "https://github.com/AsimovGod/menshen.git",
+                    "branch": "develop"
                 }
             ]
         }
